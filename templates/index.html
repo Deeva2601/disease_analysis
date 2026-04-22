@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="MediSense AI — Advanced disease prediction chatbot using machine learning. Enter your symptoms and get instant diagnosis, treatment costs, and specialist recommendations."/>
+  <meta name="keywords" content="disease prediction, AI health, symptom checker, medical diagnosis, machine learning health"/>
+  <meta property="og:title" content="MediSense AI — AI Health Companion"/>
+  <meta property="og:description" content="Predict diseases from symptoms using AI. Get treatment costs and specialist recommendations."/>
+  <title>MediSense AI | Intelligent Disease Prediction System</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>"/>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<!-- ═══ NAVBAR ═══════════════════════════════════════════════════ -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <a href="/" class="nav-brand" id="nav-brand">
+    <div class="brand-icon">🏥</div>
+    Medi<span>Sense</span> AI
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#chat-section" id="nav-chatbot">🤖 Chatbot</a></li>
+    <li><a href="#how-section" id="nav-how">📋 How It Works</a></li>
+    <li><a href="#diseases-panel" id="nav-diseases">🔬 Diseases</a></li>
+  </ul>
+
+  <div class="nav-status" id="nav-status">
+    <div class="status-dot"></div>
+    <span id="status-text">AI Online</span>
+  </div>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════════════════ -->
+<section class="hero" id="hero-section" aria-labelledby="hero-title">
+  <div class="hero-image-wrap" aria-hidden="true">
+    <img src="/static/images/hero.png" alt="MediSense AI Hero" id="hero-img" onerror="this.style.display='none'"/>
+  </div>
+
+  <div class="hero-badge" id="hero-badge">
+    🔬 Powered by Random Forest ML &nbsp;•&nbsp; 41 Diseases &nbsp;•&nbsp; 132 Symptoms
+  </div>
+
+  <h1 class="hero-title" id="hero-title">
+    Your AI <span class="gradient-text">Health Companion</span><br/>
+    is Here for You
+  </h1>
+
+  <p class="hero-sub" id="hero-sub">
+    Describe your symptoms in plain language. Our AI analyses them using machine learning
+    to identify probable diseases, estimate treatment costs, and guide you to the right specialist. 💙
+  </p>
+
+  <div class="hero-stats" id="hero-stats">
+    <div class="stat-item">
+      <div class="stat-number" id="stat-diseases">41</div>
+      <div class="stat-label">Diseases Covered</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" id="stat-symptoms">132</div>
+      <div class="stat-label">Symptoms Analysed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" id="stat-accuracy">97%</div>
+      <div class="stat-label">Model Accuracy</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" id="stat-free">Free</div>
+      <div class="stat-label">Always Free</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MODE SELECTOR ════════════════════════════════════════════ -->
+<div class="mode-section" id="mode-section">
+  <div class="mode-toggle" role="group" aria-label="User mode selection">
+    <button class="mode-btn active" id="patient-mode-btn" onclick="setMode('patient')">
+      🙋 Patient Mode
+    </button>
+    <button class="mode-btn" id="doctor-mode-btn" onclick="setMode('doctor')">
+      👨‍⚕️ Doctor Mode
+    </button>
+  </div>
+</div>
+
+<!-- ═══ MAIN LAYOUT ═══════════════════════════════════════════════ -->
+<main class="main-layout" id="chat-section" aria-label="Disease prediction chatbot">
+
+  <!-- ── LEFT: Chatbot ─────────────────────────────────────────── -->
+  <div class="chat-container" id="chat-container" role="main" aria-label="Chat interface">
+
+    <!-- Chat Header -->
+    <div class="chat-header">
+      <div class="chat-avatar" role="img" aria-label="AI Doctor Bot">🤖</div>
+      <div class="chat-header-info">
+        <h3 id="bot-name">Dr. MediBot AI</h3>
+        <p><span style="display:inline-block;width:7px;height:7px;background:#10b981;border-radius:50%;"></span> &nbsp;Available 24/7 — Ready to help you</p>
+      </div>
+      <button class="clear-btn" id="clear-chat-btn" onclick="clearChat()" title="Start a new session" aria-label="Clear chat">
+        🔄 New Session
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" id="chat-messages" aria-live="polite" aria-label="Chat messages">
+      <!-- Messages injected by JS -->
+    </div>
+
+    <!-- Suggestions -->
+    <div class="suggestions-wrap" id="suggestions-wrap" aria-label="Quick suggestions"></div>
+
+    <!-- Input Area -->
+    <div class="chat-input-wrap">
+      <div class="symptom-tags" id="symptom-tags" aria-label="Selected symptoms"></div>
+      <div class="input-row">
+        <div class="autocomplete-wrap">
+          <input
+            type="text"
+            class="chat-input"
+            id="chat-input"
+            placeholder="Describe your symptoms... e.g. fever, headache, body ache"
+            autocomplete="off"
+            aria-label="Symptom input"
+            aria-autocomplete="list"
+            aria-controls="autocomplete-list"
+          />
+          <div class="autocomplete-list" id="autocomplete-list" role="listbox" aria-label="Symptom suggestions"></div>
+        </div>
+        <button class="send-btn" id="send-btn" onclick="sendMessage()" aria-label="Send message" title="Send">
+          ➤
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: Info Panel ─────────────────────────────────────── -->
+  <aside class="right-panel" id="right-panel" aria-label="Health information panel">
+
+    <!-- Disclaimer -->
+    <div class="disclaimer-banner" role="alert">
+      ⚠️ <span><strong>Medical Disclaimer:</strong> MediSense AI is for educational purposes only. Always consult a qualified doctor for diagnosis and treatment.</span>
+    </div>
+
+    <!-- Quick Symptoms Grid -->
+    <div class="info-card" id="quick-symptoms-card">
+      <h3>⚡ Quick Symptoms</h3>
+      <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:10px;">Click to add symptoms quickly:</p>
+      <div class="symptoms-grid" id="quick-symptoms-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Disease Explorer -->
+    <div class="info-card" id="diseases-panel">
+      <h3>🔬 Disease Explorer <span style="font-size:0.72rem;color:var(--text-muted);font-weight:400;">(click any)</span></h3>
+      <div class="disease-list" id="disease-list" role="list" aria-label="Disease list">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Mode Guide -->
+    <div class="info-card" id="mode-guide-card">
+      <h3 id="mode-guide-title">🙋 Patient Guide</h3>
+      <div id="mode-guide-content">
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+          <div style="padding:10px 14px;background:var(--surface);border-radius:var(--radius-sm);font-size:0.8rem;color:var(--text-secondary);">
+            📝 <strong style="color:var(--text-primary)">Step 1:</strong> Type your symptoms naturally
+          </div>
+          <div style="padding:10px 14px;background:var(--surface);border-radius:var(--radius-sm);font-size:0.8rem;color:var(--text-secondary);">
+            🔍 <strong style="color:var(--text-primary)">Step 2:</strong> Our AI analyses them instantly
+          </div>
+          <div style="padding:10px 14px;background:var(--surface);border-radius:var(--radius-sm);font-size:0.8rem;color:var(--text-secondary);">
+            💊 <strong style="color:var(--text-primary)">Step 3:</strong> Get top probable diseases + costs
+          </div>
+          <div style="padding:10px 14px;background:var(--surface);border-radius:var(--radius-sm);font-size:0.8rem;color:var(--text-secondary);">
+            👨‍⚕️ <strong style="color:var(--text-primary)">Step 4:</strong> Visit the recommended specialist
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+</main>
+
+<!-- ═══ HOW IT WORKS ══════════════════════════════════════════════ -->
+<section class="how-section" id="how-section" aria-labelledby="how-title">
+  <h2 class="section-title" id="how-title">How <span class="gradient-text">MediSense AI</span> Works</h2>
+  <p class="section-sub">Cutting-edge machine learning meets accessible healthcare</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <span class="step-num">01</span>
+      <div class="step-icon">💬</div>
+      <h4>Describe Symptoms</h4>
+      <p>Type your symptoms naturally or use quick-select chips. Our NLP engine understands human language.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">02</span>
+      <div class="step-icon">🤖</div>
+      <h4>AI Analysis</h4>
+      <p>Random Forest ML model analyses 132+ symptom features to identify disease patterns with 97% accuracy.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">03</span>
+      <div class="step-icon">🔬</div>
+      <h4>Disease Prediction</h4>
+      <p>Get top 3 probable diseases ranked by confidence with detailed medical descriptions.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">04</span>
+      <div class="step-icon">💰</div>
+      <h4>Cost Estimate</h4>
+      <p>View average treatment costs (INR), hospital stay duration, and insurance guidance.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">05</span>
+      <div class="step-icon">👨‍⚕️</div>
+      <h4>Expert Referral</h4>
+      <p>Get directed to the right specialist — Cardiologist, Neurologist, Dermatologist, and more.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">06</span>
+      <div class="step-icon">💊</div>
+      <h4>Precautions & Care</h4>
+      <p>Receive evidence-based precautions, lifestyle advice, and emergency guidelines.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════ -->
+<footer role="contentinfo">
+  <p>🏥 <strong>MediSense AI</strong> — Intelligent Disease Prediction System &nbsp;|&nbsp
+     Built with ❤️ using Python, Flask & Random Forest ML</p>
+  <p style="margin-top:6px;font-size:0.74rem;">
+    ⚠️ This tool is for <strong>educational purposes only</strong>. It does not replace professional medical advice, diagnosis, or treatment.
+    Always seek the advice of a qualified physician. &nbsp;|&nbsp; © 2024 MediSense AI. All rights reserved.
+  </p>
+</footer>
+
+<!-- ═══ DISEASE DETAIL MODAL ══════════════════════════════════════ -->
+<div class="modal-overlay" id="disease-modal" role="dialog" aria-modal="true" aria-labelledby="modal-disease-name" onclick="closeModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('disease-modal').classList.remove('show')" aria-label="Close modal">✕</button>
+    <div id="modal-content"><!-- Populated by JS --></div>
+  </div>
+</div>
+
+<script src="/static/js/chat.js"></script>
+</body>
+</html>
